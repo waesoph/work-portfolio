@@ -48,7 +48,7 @@ export default function Contact() {
           Contact
         </h1>
         <p className="text-slate-300">
-          Ready to collaborate or want to say hello? Drop a note and I&apos;ll get
+          Ready to collaborate or want to say hello? Drop a note or email me at <a href="mailto:willaesoph@gmail.com">willaesoph@gmail.com</a> and I&apos;ll get
           back to you soon.
         </p>
       </header>

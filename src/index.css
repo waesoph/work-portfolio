@@ -8,8 +8,16 @@ body {
     @apply text-white;
 }
 
+a {
+    @apply duration-300 hover:opacity-50 font-semibold;
+}
+
+p {
+    @apply text-slate-300;
+}
+
 .container {
-    @apply max-w-7xl px-6;
+    @apply max-w-7xl px-6 mx-auto;
 }
 
 .section {

@@ -4,12 +4,12 @@ export default function About() {
       <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
         About Me
       </h1>
-      <p className="text-slate-300">
+      <p>
         Swap this placeholder copy with your story—share your background,
         design or development focus, tools you prefer, and what kind of work
         you are most interested in.
       </p>
-      <p className="text-slate-400">
+      <p>
         You can add more sections here to highlight experience, notable clients,
         or anything else that helps visitors understand your expertise.
       </p>
