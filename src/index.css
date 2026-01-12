@@ -8,6 +8,10 @@ body {
     @apply text-white;
 }
 
+h2 {
+    @apply text-2xl lg:text-4xl font-semibold;
+}
+
 a {
     @apply duration-300 hover:opacity-50 font-semibold;
 }
