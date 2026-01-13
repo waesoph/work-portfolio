@@ -1,4 +1,4 @@
-export default function About() {
+export default function Services() {
   return (
     <section className="mx-auto max-w-3xl px-6 py-16 space-y-6">
       <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
