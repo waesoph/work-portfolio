@@ -36,7 +36,7 @@ export default function Header() {
     ))
 
   return (
-    <header className="border-b border-slate-900/70 bg-slate-950/90 backdrop-blur">
+    <header className="border-b-2 border-slate-200/70 bg-slate-950/90 backdrop-blur sticky top-0 z-100">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link
           to="/"
@@ -48,14 +48,14 @@ export default function Header() {
 
         <nav className="hidden items-center gap-2 md:flex">{renderLinks()}</nav>
 
-        <a
-            href="will-aesoph-resume.pdf"
-            className="hidden rounded-md border border-slate-800 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-slate-700 hover:bg-slate-900 md:inline-block"
+        <Link
+            to="will-aesoph-resume.pdf"
+            className="hidden rounded-md border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-slate-700 hover:bg-slate-900 md:inline-block"
             target="_blank"
             rel="noopener noreferrer"
           >
             Resume
-        </a>
+        </Link>
 
         <button
           type="button"
