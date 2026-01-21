@@ -4,16 +4,21 @@ export default function Services() {
       <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
         Services
       </h1>
-      <p>
-        Swap this placeholder copy with your story—share your background,
-        design or development focus, tools you prefer, and what kind of work
-        you are most interested in.
-      </p>
-      <p>
-        You can add more sections here to highlight experience, notable clients,
-        or anything else that helps visitors understand your expertise.
-      </p>
-      <a/>
+      <div>
+        <h2>Full Rebuild</h2>
+        <p>I will work with you to do some stuff</p>
+      </div>
+
+      <div>
+        <h2>Full Rebuild</h2>
+        <p>I will work with you to do some stuff</p>
+      </div>
+
+      <div>
+        <h2>Full Rebuild</h2>
+        <p>I will work with you to do some stuff</p>
+      </div>            
+
     </section>
   )
 }

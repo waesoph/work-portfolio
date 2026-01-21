@@ -47,7 +47,7 @@ export default function Contact() {
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
           Contact
         </h1>
-        <p className="text-slate-300">
+        <p className="text-slate-300 my-6">
           Ready to collaborate or want to say hello? Drop a note or email me at <a href="mailto:willaesoph@gmail.com">willaesoph@gmail.com</a> and I&apos;ll get
           back to you soon.
         </p>

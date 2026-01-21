@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { NavLink, Link } from 'react-router-dom'
+import Close from '../assets/icons/close.svg?react'
+import Hamburger from '../assets/icons/hamburger-menu.svg?react'
 
 const navItems = [
   { to: '/', label: 'Home' },
-  { to: '/services', label: 'Services' },
-  { to: '/work', label: 'Work' },
+  // { to: '/services', label: 'Services' },
+  // { to: '/work', label: 'Work' },
   { to: '/contact', label: 'Contact' },
 ]
 
@@ -60,11 +62,11 @@ export default function Header() {
         <button
           type="button"
           onClick={toggleMenu}
-          className="inline-flex items-center rounded-md border border-slate-800 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-slate-700 hover:bg-slate-900 md:hidden"
+          className="inline-flex items-center text-sm font-semibold text-slate-200 transition hover:border-slate-700 hover:bg-slate-900 md:hidden"
           aria-expanded={isMenuOpen}
           aria-controls="mobile-navigation"
         >
-          {isMenuOpen ? 'Close' : 'Menu'}
+          {isMenuOpen ? <Close /> : <Hamburger />}
         </button>
       </div>
 

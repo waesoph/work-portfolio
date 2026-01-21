@@ -18,7 +18,6 @@ export default function Home() {
         <img src={headshotImg} alt="Headshot of Will Aesoph" className="rounded-full w-1/3 h-auto" />
       </div>
 
-
     <div className="section">
       <h2 className="text-2xl lg:text-4xl font-semibold mb-8 lg:mb-12">Brands I've Worked With</h2>
       <ClientSlider />     
