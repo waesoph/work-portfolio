@@ -31,7 +31,7 @@ function PrevArrow(props) {
   );
 }
 
-function ClientSlider() {
+export default function ClientSlider() {
   const settings = {
     dots: true,
     infinite: true,
@@ -70,7 +70,7 @@ function ClientSlider() {
               <h3 className="text-lg lg:text-xl font-semibold text-slate-950">{client.name}</h3>
             </div>
             <div className="absolute left-0 -top-full group-hover:top-0 h-1/2 duration-300 w-full bg-black/70 p-6 text-left ">
-              <h4 className="text-lg font-semibold">Work Done:</h4>
+              <h4 className="text-lg font-semibold">Projects Completed:</h4>
               <ul className="opacity-0 group-hover:opacity-100 !duration-400 group-hover:delay-400">
                 {client.work.map((item) => (
                   <li key={item}>{item}</li>
@@ -95,5 +95,3 @@ function ClientSlider() {
     </div>
   );
 }
-
-export default ClientSlider;

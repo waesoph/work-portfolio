@@ -1,5 +1,6 @@
 import Header from './components/header.jsx'
 import Footer from './components/footer.jsx'
+import Hero from './components/hero.jsx'
 import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import Services from './pages/Services.jsx'
@@ -14,6 +15,7 @@ function App() {
     <div className="flex min-h-screen flex-col bg-slate-950">
       <Header />
       <main className="flex-1">
+        <Hero />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/services" element={<Services />} />

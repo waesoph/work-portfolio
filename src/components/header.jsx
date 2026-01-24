@@ -5,8 +5,8 @@ import Hamburger from '../assets/icons/hamburger-menu.svg?react'
 
 const navItems = [
   { to: '/', label: 'Home' },
-  // { to: '/services', label: 'Services' },
-  // { to: '/work', label: 'Work' },
+  { to: '/services', label: 'Services' },
+  { to: '/work', label: 'Work' },
   { to: '/contact', label: 'Contact' },
 ]
 

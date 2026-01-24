@@ -42,8 +42,8 @@ export default function Contact() {
   }
 
   return (
-    <section className="mx-auto flex min-h-[60vh] w-full max-w-xl flex-col gap-6 px-6 py-16">
-      <header className="space-y-2 text-center">
+    <section className="mx-auto flex min-h-[60vh] w-full max-w-xl flex-col gap-6 px-6 py-16" id="#contact">
+      <div className="space-y-2 text-center">
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
           Contact
         </h1>
@@ -51,7 +51,7 @@ export default function Contact() {
           Ready to collaborate or want to say hello? Drop a note or email me at <a href="mailto:willaesoph@gmail.com">willaesoph@gmail.com</a> and I&apos;ll get
           back to you soon.
         </p>
-      </header>
+      </div>
 
       <form
         onSubmit={handleSubmit}
