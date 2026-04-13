@@ -68,7 +68,7 @@ export default function Contact() {
   const contactItems = [
     {
       label: 'LinkedIn',
-      href: 'https://www.linkedin.com/waesoph',
+      href: 'https://www.linkedin.com/in/will-aesoph',
       ariaLabel: 'Visit LinkedIn profile',
       icon: <LinkedInIcon />,
     },

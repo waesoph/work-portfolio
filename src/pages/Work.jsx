@@ -15,8 +15,8 @@ const CASE_STUDY_CONTENT_REVEAL_DELAY_MS =
   CASE_STUDY_PHRASE_START_DELAY_MS + CASE_STUDY_PHRASE_SLIDE_MS + 120
 const CASE_STUDY_PHRASE_OVERLAY_HIDE_DELAY_MS = 340
 const CASE_STUDY_CLOSE_RETURN_MS = Math.max(CASE_STUDY_ANIMATION_MS, CASE_STUDY_PHRASE_SLIDE_MS)
-const CASE_STUDY_IMAGE_FADE_WINDOW = 0.36
 const CASE_STUDY_IMAGE_FADE_MS = 900
+const CASE_STUDY_HEADER_ACTIVATION_OFFSET_PX = 108
 const WORK_CARD_ENTRY_INITIAL_DELAY_MS = 560
 const WORK_CARD_ENTRY_STAGGER_MS = 150
 
@@ -90,60 +90,42 @@ function getCollapsedTransform(originRect) {
   return `translate3d(${originRect.left}px, ${originRect.top}px, 0) scale(${scaleX}, ${scaleY})`
 }
 
-function buildCaseStudyImageLayers(client, scrollProgress) {
+function getCaseStudyImageSource(client, scrollProgress) {
+  if (!client) {
+    return ''
+  }
+
   const progress = clamp(scrollProgress, 0, 1)
 
   const clientKeyframes = Array.isArray(client.caseStudy?.images)
     ? client.caseStudy.images
     : []
 
-  const resolvedKeyframes =
-    clientKeyframes.length > 0
-      ? clientKeyframes
-      : [{ id: 'hero', at: 0, src: client.screenshot }]
+  const resolvedKeyframes = clientKeyframes.length > 0
+    ? clientKeyframes
+    : [{ id: 'hero', at: 0, src: client.screenshot }]
 
   const keyframes = resolvedKeyframes
     .map((frame, index) => ({
       id: frame.id ?? `frame-${index + 1}`,
       at: clamp(Number(frame.at ?? 0), 0, 1),
       src: frame.src || client.screenshot,
-      fadeWindow: frame.fadeWindow ?? CASE_STUDY_IMAGE_FADE_WINDOW,
     }))
     .filter((frame) => Boolean(frame.src))
     .sort((a, b) => a.at - b.at)
 
   if (keyframes.length === 0) {
-    return [{ key: 'fallback', src: client.screenshot, opacity: 1 }]
+    return client.screenshot
   }
 
-  let resolvedFrame = keyframes[0]
-
+  let resolvedFrameSrc = keyframes[0].src
   for (let index = 1; index < keyframes.length; index += 1) {
-    const nextFrame = keyframes[index]
-    const transitionStart = clamp(nextFrame.at - nextFrame.fadeWindow / 2, 0, 1)
-    const transitionEnd = clamp(nextFrame.at + nextFrame.fadeWindow / 2, 0, 1)
-
-    if (progress < transitionStart) {
-      return [{ key: resolvedFrame.id, src: resolvedFrame.src, opacity: 1 }]
+    if (progress >= keyframes[index].at) {
+      resolvedFrameSrc = keyframes[index].src
     }
-
-    if (progress <= transitionEnd) {
-      const blend = clamp(
-        (progress - transitionStart) / Math.max(transitionEnd - transitionStart, 0.0001),
-        0,
-        1,
-      )
-
-      return [
-        { key: resolvedFrame.id, src: resolvedFrame.src, opacity: 1 - blend },
-        { key: nextFrame.id, src: nextFrame.src, opacity: blend },
-      ]
-    }
-
-    resolvedFrame = nextFrame
   }
 
-  return [{ key: resolvedFrame.id, src: resolvedFrame.src, opacity: 1 }]
+  return resolvedFrameSrc
 }
 
 function toReadableWorkLabel(keyword) {
@@ -164,6 +146,72 @@ function buildDefaultCaseStudyParagraphs(client) {
     `The scope included ${workSummary}, with a strong emphasis on clean execution, clear user flows, and maintainable implementation. This included careful planning around content structure, component flexibility, and implementation patterns that would let the team extend the site over time without introducing unnecessary complexity or regressions.`,
     `The project focused on reducing friction, clarifying hierarchy, and creating a more intuitive experience across device sizes. We also used this pass to simplify navigation paths, make core interactions more obvious, and strengthen visual rhythm so users could move through key journeys with less cognitive load and fewer drop-off points.`,
     `This is placeholder case study copy for now. Replace these paragraphs with project-specific details, outcomes, and technical decisions. You can expand this section with measurable results, before-and-after context, architecture choices, and lessons learned to create a complete narrative that supports both portfolio storytelling and technical depth.`,
+  ]
+}
+
+function buildCaseStudySections(client, paragraphs) {
+  if (!client) {
+    return []
+  }
+
+  const phrase = String(client?.caseStudy?.phrase || '').trim()
+  const configuredSections = Array.isArray(client?.caseStudy?.sections)
+    ? client.caseStudy.sections
+      .map((section, index, sections) => {
+        const heading = String(section?.heading || '').trim()
+        const sectionParagraphs = Array.isArray(section?.copy)
+          ? section.copy.filter(Boolean)
+          : section?.copy
+            ? [section.copy]
+            : []
+        const normalizedAt = sections.length > 0 ? index / sections.length : 0
+
+        return {
+          key: section?.id ?? `section-${index + 1}`,
+          at: clamp(Number(section?.at ?? normalizedAt), 0, 1),
+          image: section?.image || getCaseStudyImageSource(client, normalizedAt),
+          heading: heading || (index === 0 ? phrase : ''),
+          paragraphs: sectionParagraphs,
+        }
+      })
+      .filter((section) => section.heading || section.paragraphs.length > 0)
+    : []
+
+  if (configuredSections.length > 0) {
+    return configuredSections
+  }
+
+  const validParagraphs = Array.isArray(paragraphs) ? paragraphs.filter(Boolean) : []
+  const midHeading = String(client?.caseStudy?.midHeading || '').trim()
+  const midpointIndex = midHeading ? Math.ceil(validParagraphs.length / 2) : -1
+
+  if (midHeading) {
+    return [
+      {
+        key: 'section-1',
+        at: 0,
+        image: getCaseStudyImageSource(client, 0),
+        heading: phrase,
+        paragraphs: validParagraphs.slice(0, midpointIndex),
+      },
+      {
+        key: 'section-2',
+        at: 0.5,
+        image: getCaseStudyImageSource(client, 0.5),
+        heading: midHeading,
+        paragraphs: validParagraphs.slice(midpointIndex),
+      },
+    ].filter((section) => section.heading || section.paragraphs.length > 0)
+  }
+
+  return [
+    {
+      key: 'section-1',
+      at: 0,
+      image: getCaseStudyImageSource(client, 0),
+      heading: phrase,
+      paragraphs: validParagraphs,
+    },
   ]
 }
 
@@ -216,6 +264,94 @@ function getOffsetWithinAncestor(node, ancestor) {
   return { left, top }
 }
 
+function renderParagraphWithInlineLinks(paragraph, inlineLinks, keyPrefix) {
+  const paragraphText = String(paragraph || '')
+  if (!paragraphText) {
+    return paragraphText
+  }
+
+  const validLinks = Array.isArray(inlineLinks)
+    ? inlineLinks.filter((link) => Boolean(link?.text) && Boolean(link?.url))
+    : []
+
+  if (validLinks.length === 0) {
+    return paragraphText
+  }
+
+  const matches = []
+  validLinks.forEach((link, linkIndex) => {
+    let searchStart = 0
+    while (searchStart < paragraphText.length) {
+      const matchStart = paragraphText.indexOf(link.text, searchStart)
+      if (matchStart === -1) {
+        break
+      }
+
+      matches.push({
+        start: matchStart,
+        end: matchStart + link.text.length,
+        url: link.url,
+        key: `${keyPrefix}-link-${linkIndex}-${matchStart}`,
+      })
+
+      searchStart = matchStart + link.text.length
+    }
+  })
+
+  if (matches.length === 0) {
+    return paragraphText
+  }
+
+  const sortedMatches = matches.sort((a, b) => {
+    if (a.start !== b.start) {
+      return a.start - b.start
+    }
+    return b.end - a.end
+  })
+
+  const nonOverlappingMatches = []
+  let matchCursor = -1
+  sortedMatches.forEach((match) => {
+    if (match.start >= matchCursor) {
+      nonOverlappingMatches.push(match)
+      matchCursor = match.end
+    }
+  })
+
+  if (nonOverlappingMatches.length === 0) {
+    return paragraphText
+  }
+
+  const renderedParts = []
+  let textCursor = 0
+
+  nonOverlappingMatches.forEach((match) => {
+    if (match.start > textCursor) {
+      renderedParts.push(paragraphText.slice(textCursor, match.start))
+    }
+
+    renderedParts.push(
+      <a
+        key={match.key}
+        href={match.url}
+        target="_blank"
+        rel="noreferrer"
+        className="font-semibold text-white underline decoration-white/80 underline-offset-2 transition-opacity hover:opacity-80"
+      >
+        {paragraphText.slice(match.start, match.end)}
+      </a>,
+    )
+
+    textCursor = match.end
+  })
+
+  if (textCursor < paragraphText.length) {
+    renderedParts.push(paragraphText.slice(textCursor))
+  }
+
+  return renderedParts
+}
+
 export default function Work() {
   const { slug } = useParams()
   const navigate = useNavigate()
@@ -225,6 +361,10 @@ export default function Work() {
   const [caseStudyPhraseDocked, setCaseStudyPhraseDocked] = useState(false)
   const [caseStudyOriginRect, setCaseStudyOriginRect] = useState(null)
   const [caseStudyTextProgress, setCaseStudyTextProgress] = useState(0)
+  const [activeCaseStudySectionIndex, setActiveCaseStudySectionIndex] = useState(0)
+  const [activeCaseStudyImageSrc, setActiveCaseStudyImageSrc] = useState('')
+  const [previousCaseStudyImageSrc, setPreviousCaseStudyImageSrc] = useState('')
+  const [isCaseStudyImageTransitioning, setIsCaseStudyImageTransitioning] = useState(false)
   const [caseStudyPhraseTargetPosition, setCaseStudyPhraseTargetPosition] = useState(null)
   const [isCaseStudyPhraseOverlayVisible, setIsCaseStudyPhraseOverlayVisible] = useState(true)
   const [isDesktopCaseStudyLayout, setIsDesktopCaseStudyLayout] = useState(() =>
@@ -232,8 +372,12 @@ export default function Work() {
   )
   const cardRefs = useRef(new Map())
   const caseStudyPanelRef = useRef(null)
+  const caseStudyStickyHeaderRef = useRef(null)
+  const caseStudyTextScrollContainerRef = useRef(null)
+  const caseStudySectionHeadingRefs = useRef([])
   const caseStudyPhraseAnchorRef = useRef(null)
   const animationTimersRef = useRef([])
+  const imageTransitionTimerRef = useRef(null)
   const routeClientName = useMemo(
     () => (slug ? CASE_STUDY_ROUTE_TO_CLIENT[slug] ?? null : null),
     [slug],
@@ -270,22 +414,82 @@ export default function Work() {
     },
     [activeClient],
   )
+  const activeCaseStudySections = useMemo(
+    () => buildCaseStudySections(activeClient, activeCaseStudyParagraphs),
+    [activeCaseStudyParagraphs, activeClient],
+  )
   const activeCaseStudyPhrase = useMemo(
     () => (activeClient ? getCaseStudyPhrase(activeClient) : ''),
     [activeClient],
   )
-
-  const activeCaseStudyImageLayers = useMemo(
-    () => (activeClient ? buildCaseStudyImageLayers(activeClient, caseStudyTextProgress) : []),
-    [activeClient, caseStudyTextProgress],
+  const activeCaseStudyInlineLinks = useMemo(
+    () => (Array.isArray(activeClient?.caseStudy?.inlineLinks) ? activeClient.caseStudy.inlineLinks : []),
+    [activeClient],
   )
+
+  const activeSectionImageSrc = useMemo(() => {
+    if (!activeClient) {
+      return ''
+    }
+
+    const activeSection = activeCaseStudySections[activeCaseStudySectionIndex]
+    if (activeSection?.image) {
+      return activeSection.image
+    }
+
+    return getCaseStudyImageSource(activeClient, caseStudyTextProgress)
+  }, [activeCaseStudySectionIndex, activeCaseStudySections, activeClient, caseStudyTextProgress])
 
   const clearAnimationTimers = useCallback(() => {
     animationTimersRef.current.forEach((timerId) => window.clearTimeout(timerId))
     animationTimersRef.current = []
   }, [])
 
+  const clearImageTransitionTimer = useCallback(() => {
+    if (imageTransitionTimerRef.current !== null) {
+      window.clearTimeout(imageTransitionTimerRef.current)
+      imageTransitionTimerRef.current = null
+    }
+  }, [])
+
+  const updateActiveSectionFromHeaderPositions = useCallback((scrollElement) => {
+    if (!scrollElement || activeCaseStudySections.length === 0) {
+      setActiveCaseStudySectionIndex(0)
+      return
+    }
+
+    const stickyHeaderHeight = caseStudyStickyHeaderRef.current?.offsetHeight ?? 0
+    const activationY =
+      scrollElement.getBoundingClientRect().top +
+      stickyHeaderHeight +
+      CASE_STUDY_HEADER_ACTIVATION_OFFSET_PX
+
+    let nextActiveSectionIndex = 0
+    activeCaseStudySections.forEach((_, index) => {
+      const headingElement = caseStudySectionHeadingRefs.current[index]
+      if (!headingElement) {
+        return
+      }
+
+      if (headingElement.getBoundingClientRect().top <= activationY) {
+        nextActiveSectionIndex = index
+      }
+    })
+
+    setActiveCaseStudySectionIndex((previousIndex) =>
+      previousIndex === nextActiveSectionIndex ? previousIndex : nextActiveSectionIndex,
+    )
+  }, [activeCaseStudySections])
+
   useEffect(() => () => clearAnimationTimers(), [clearAnimationTimers])
+  useEffect(() => () => clearImageTransitionTimer(), [clearImageTransitionTimer])
+
+  useEffect(() => {
+    caseStudySectionHeadingRefs.current = caseStudySectionHeadingRefs.current.slice(
+      0,
+      activeCaseStudySections.length,
+    )
+  }, [activeCaseStudySections.length])
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -330,7 +534,12 @@ export default function Work() {
   useEffect(() => {
     if (routeClientName && routeClientName !== activeClientName) {
       clearAnimationTimers()
+      clearImageTransitionTimer()
       setCaseStudyTextProgress(0)
+      setActiveCaseStudySectionIndex(0)
+      setActiveCaseStudyImageSrc('')
+      setPreviousCaseStudyImageSrc('')
+      setIsCaseStudyImageTransitioning(false)
       setCaseStudyPhraseTargetPosition(null)
       setIsCaseStudyPhraseOverlayVisible(true)
       setCaseStudyExpanded(false)
@@ -370,8 +579,10 @@ export default function Work() {
 
     if (!routeClientName && activeClientName) {
       clearAnimationTimers()
+      clearImageTransitionTimer()
       setCaseStudyTextExpanded(false)
       setIsCaseStudyPhraseOverlayVisible(true)
+      setActiveCaseStudySectionIndex(0)
 
       if (!isDesktopCaseStudyLayout) {
         const clearPanelTimer = window.setTimeout(() => {
@@ -380,6 +591,9 @@ export default function Work() {
           setActiveClientName(null)
           setCaseStudyOriginRect(null)
           setCaseStudyTextProgress(0)
+          setActiveCaseStudyImageSrc('')
+          setPreviousCaseStudyImageSrc('')
+          setIsCaseStudyImageTransitioning(false)
           setCaseStudyPhraseTargetPosition(null)
         }, 220)
 
@@ -396,12 +610,54 @@ export default function Work() {
         setActiveClientName(null)
         setCaseStudyOriginRect(null)
         setCaseStudyTextProgress(0)
+        setActiveCaseStudyImageSrc('')
+        setPreviousCaseStudyImageSrc('')
+        setIsCaseStudyImageTransitioning(false)
         setCaseStudyPhraseTargetPosition(null)
       }, CASE_STUDY_CONTENT_EXIT_FADE_MS + CASE_STUDY_CLOSE_RETURN_MS)
 
       animationTimersRef.current = [collapsePanelTimer, clearPanelTimer]
     }
-  }, [activeClientName, clearAnimationTimers, isDesktopCaseStudyLayout, routeClientName])
+  }, [
+    activeClientName,
+    clearAnimationTimers,
+    clearImageTransitionTimer,
+    isDesktopCaseStudyLayout,
+    routeClientName,
+  ])
+
+  useEffect(() => {
+    if (!activeClient || !activeSectionImageSrc) {
+      return
+    }
+
+    if (!activeCaseStudyImageSrc) {
+      setActiveCaseStudyImageSrc(activeSectionImageSrc)
+      setPreviousCaseStudyImageSrc('')
+      setIsCaseStudyImageTransitioning(false)
+      return
+    }
+
+    if (activeCaseStudyImageSrc === activeSectionImageSrc) {
+      return
+    }
+
+    clearImageTransitionTimer()
+    setPreviousCaseStudyImageSrc(activeCaseStudyImageSrc)
+    setActiveCaseStudyImageSrc(activeSectionImageSrc)
+    setIsCaseStudyImageTransitioning(true)
+
+    imageTransitionTimerRef.current = window.setTimeout(() => {
+      setPreviousCaseStudyImageSrc('')
+      setIsCaseStudyImageTransitioning(false)
+      imageTransitionTimerRef.current = null
+    }, CASE_STUDY_IMAGE_FADE_MS)
+  }, [
+    activeCaseStudyImageSrc,
+    activeClient,
+    activeSectionImageSrc,
+    clearImageTransitionTimer,
+  ])
 
   useEffect(() => {
     if (!activeClient) {
@@ -429,7 +685,34 @@ export default function Work() {
     const { scrollTop, scrollHeight, clientHeight } = event.currentTarget
     const scrollableHeight = Math.max(scrollHeight - clientHeight, 1)
     setCaseStudyTextProgress(clamp(scrollTop / scrollableHeight, 0, 1))
+    updateActiveSectionFromHeaderPositions(event.currentTarget)
   }
+
+  useEffect(() => {
+    if (!activeClient || !caseStudyTextExpanded) {
+      setActiveCaseStudySectionIndex(0)
+      return undefined
+    }
+
+    const updateFromCurrentScrollPosition = () => {
+      updateActiveSectionFromHeaderPositions(caseStudyTextScrollContainerRef.current)
+    }
+
+    const animationFrameId = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(updateFromCurrentScrollPosition)
+    })
+
+    window.addEventListener('resize', updateFromCurrentScrollPosition)
+    return () => {
+      window.cancelAnimationFrame(animationFrameId)
+      window.removeEventListener('resize', updateFromCurrentScrollPosition)
+    }
+  }, [
+    activeCaseStudySections,
+    activeClient,
+    caseStudyTextExpanded,
+    updateActiveSectionFromHeaderPositions,
+  ])
 
   useEffect(() => {
     if (!activeClient || !isDesktopCaseStudyLayout) {
@@ -509,7 +792,7 @@ export default function Work() {
 
   return (
     <section className="section w-full bg-black">
-      <div className="px-0 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full px-3 sm:px-6 lg:px-10">
         <ul className="grid grid-cols-1 gap-3 xl:grid-cols-2 xl:gap-3">
           {featuredClients.map((client, index) => (
             <li key={client.name}>
@@ -540,7 +823,7 @@ export default function Work() {
                 }}
               >
                 <div className="relative z-10 h-full p-3 transition-opacity duration-500 group-hover:opacity-0 sm:p-4 lg:p-5">
-                  <div className="relative flex h-full items-center justify-center pb-12 sm:pb-14 lg:pb-16">
+                  <div className="relative flex h-full items-center justify-center">
                     <img
                       src={client.logo}
                       alt={`${client.name} logo`}
@@ -653,23 +936,44 @@ export default function Work() {
                           : '220px',
                       }}
                     >
-                      <div className="relative h-full w-full overflow-hidden bg-black">
-                        {activeCaseStudyImageLayers.map((layer) => (
-                          <img
-                            key={layer.key}
-                            src={layer.src}
-                            alt={`${activeClient.name} case study image`}
-                            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[500ms] ${
-                              caseStudyTextExpanded ? 'opacity-100' : 'opacity-0'
-                            }`}
-                            style={{
-                              opacity: caseStudyTextExpanded ? layer.opacity : 0,
-                              transitionDuration: caseStudyTextExpanded
-                                ? `${CASE_STUDY_IMAGE_FADE_MS}ms`
-                                : `${CASE_STUDY_CONTENT_FADE_MS}ms`,
-                            }}
-                          />
-                        ))}
+                      <div className="flex h-full flex-col bg-black p-4 sm:p-6 lg:p-10">
+                        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-slate-300/40 bg-[#0f1115]">
+                          <div className="relative z-10 flex h-8 shrink-0 items-center gap-1.5 border-b border-white/10 bg-[#121821] px-3">
+                            <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
+                            <span className="h-2.5 w-2.5 rounded-full bg-yellow-300" />
+                            <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
+                          </div>
+                          <div className="relative min-h-0 flex-1 overflow-hidden bg-black">
+                            {previousCaseStudyImageSrc && isCaseStudyImageTransitioning ? (
+                              <img
+                                key={`case-study-image-previous-${previousCaseStudyImageSrc}`}
+                                src={previousCaseStudyImageSrc}
+                                alt={`${activeClient.name} case study image`}
+                                className={`absolute inset-0 h-full w-full object-top object-cover ${
+                                  caseStudyTextExpanded ? 'opacity-100' : 'opacity-0'
+                                }`}
+                                style={{
+                                  animation: `caseStudyImageFadeOut ${CASE_STUDY_IMAGE_FADE_MS}ms ease forwards`,
+                                }}
+                              />
+                            ) : null}
+                            {activeCaseStudyImageSrc ? (
+                              <img
+                                key={`case-study-image-active-${activeCaseStudyImageSrc}`}
+                                src={activeCaseStudyImageSrc}
+                                alt={`${activeClient.name} case study image`}
+                                className={`absolute inset-0 h-full w-full object-top object-cover ${
+                                  caseStudyTextExpanded ? 'opacity-100' : 'opacity-0'
+                                }`}
+                                style={{
+                                  animation: isCaseStudyImageTransitioning
+                                    ? `caseStudyImageFadeIn ${CASE_STUDY_IMAGE_FADE_MS}ms ease forwards`
+                                    : 'none',
+                                }}
+                              />
+                            ) : null}
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -691,13 +995,17 @@ export default function Work() {
                       }}
                     >
                       <div
+                        ref={caseStudyTextScrollContainerRef}
                         onScroll={handleCaseStudyTextScroll}
-                        className="case-study-scrollbar-hidden h-full overflow-y-auto bg-black px-6 pb-36 sm:px-10 lg:px-14 lg:pb-44"
+                        className="case-study-scrollbar-hidden h-full overflow-y-auto bg-black px-6 pb-[42vh] sm:px-10 sm:pb-[38vh] lg:px-14 lg:pb-[34vh]"
                       >
                         <div className="w-full text-left lg:ml-auto lg:mr-0 lg:max-w-[800px]">
-                          <div className="sticky top-0 z-20 bg-black pt-[6.5rem] sm:pt-28 lg:pt-32">
+                          <div
+                            ref={caseStudyStickyHeaderRef}
+                            className="sticky top-0 z-20 bg-black pt-5 sm:pt-24 lg:pt-32"
+                          >
                             <h2
-                              className={`text-3xl font-semibold tracking-tight text-white transition-opacity duration-[500ms] sm:text-5xl lg:text-6xl ${
+                              className={`font-semibold tracking-tight text-white transition-opacity duration-[500ms] sm:!text-3xl lg:!text-5xl ${
                                 caseStudyTextExpanded ? 'opacity-100 delay-[140ms]' : 'opacity-0'
                               }`}
                             >
@@ -715,30 +1023,63 @@ export default function Work() {
                                 aria-label={`Open live link for ${activeClient.name}`}
                                 className="mt-3 inline-block text-sm font-semibold uppercase tracking-[0.14em] text-white underline decoration-white underline-offset-4 transition hover:opacity-80 sm:text-base"
                               >
-                                Live Link
+                                Live Website
                               </a>
                             </div>
                           </div>
 
                           <div
-                            className={`mt-8 pt-4 space-y-8 text-xl leading-snug text-white transition-opacity duration-[500ms] sm:mt-10 sm:text-2xl lg:mt-14 ${
+                            className={`mt-4 pt-2 space-y-10 text-lg leading-[1.8] text-white transition-opacity duration-[500ms] sm:mt-10 sm:space-y-12 sm:text-2xl lg:mt-14 ${
                               caseStudyTextExpanded ? 'opacity-100 delay-[340ms]' : 'opacity-0'
                             }`}
                           >
-                            <h3
-                              ref={caseStudyPhraseAnchorRef}
-                              className="hidden text-[clamp(1.6rem,2.2vw,2.6rem)] font-semibold tracking-tight text-white lg:block"
-                            >
-                              {activeCaseStudyPhrase}
-                            </h3>
-                            <h3 className="text-2xl font-semibold tracking-tight text-white lg:hidden sm:text-3xl">
-                              {activeCaseStudyPhrase}
-                            </h3>
-                            {activeCaseStudyParagraphs.map((paragraph) => (
-                              <p key={paragraph} className="!text-white">
-                                {paragraph}
-                              </p>
-                            ))}
+                            {activeCaseStudySections.map((section, index) => {
+                              const isActiveSection = index === activeCaseStudySectionIndex
+                              const sectionHeading = index === 0
+                                ? activeCaseStudyPhrase
+                                : section.heading
+
+                              return (
+                                <div
+                                  key={section.key}
+                                  className={`space-y-4 transition-opacity duration-[500ms] ${
+                                    isActiveSection ? 'opacity-100' : 'opacity-30'
+                                  }`}
+                                >
+                                  {sectionHeading ? (
+                                    index === 0 ? (
+                                      <h3
+                                        ref={(node) => {
+                                          caseStudyPhraseAnchorRef.current = node
+                                          caseStudySectionHeadingRefs.current[index] = node
+                                        }}
+                                        className="text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:text-[clamp(1.6rem,2.2vw,2.6rem)]"
+                                      >
+                                        {sectionHeading}
+                                      </h3>
+                                    ) : (
+                                      <h4
+                                        ref={(node) => {
+                                          caseStudySectionHeadingRefs.current[index] = node
+                                        }}
+                                        className="text-2xl font-semibold tracking-tight text-white sm:text-3xl"
+                                      >
+                                        {sectionHeading}
+                                      </h4>
+                                    )
+                                  ) : null}
+                                  {section.paragraphs.map((paragraph, paragraphIndex) => (
+                                    <p key={`${section.key}-paragraph-${paragraphIndex}`} className="!text-white">
+                                      {renderParagraphWithInlineLinks(
+                                        paragraph,
+                                        activeCaseStudyInlineLinks,
+                                        `${section.key}-paragraph-${paragraphIndex}`,
+                                      )}
+                                    </p>
+                                  ))}
+                                </div>
+                              )
+                            })}
                           </div>
                         </div>
                       </div>
@@ -749,9 +1090,22 @@ export default function Work() {
                         type="button"
                         onClick={closeCaseStudy}
                         aria-label="Go back from case study"
-                        className="absolute bottom-6 left-6 z-20 cursor-pointer text-base font-bold text-white transition hover:opacity-80 sm:bottom-8 sm:left-10 lg:left-14"
+                        className="group absolute bottom-6 left-6 z-20 flex cursor-pointer items-center gap-2.5 text-[1rem] leading-none font-bold text-white transition hover:opacity-80 sm:bottom-8 sm:left-10 sm:gap-3 sm:text-[2rem] lg:left-14"
                       >
-                        ← Go Back
+                        <span
+                          aria-hidden="true"
+                          className="inline-flex transition-transform duration-300 group-hover:-translate-x-4"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 -960 960 960"
+                            className="h-5 w-5 sm:h-10 sm:w-10"
+                            fill="#e3e3e3"
+                          >
+                            <path d="m287-446.67 240 240L480-160 160-480l320-320 47 46.67-240 240h513v66.66H287Z" />
+                          </svg>
+                        </span>
+                        <span>Go Back</span>
                       </button>
                     </div>
                   </div>

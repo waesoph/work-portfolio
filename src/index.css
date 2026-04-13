@@ -8,16 +8,6 @@ body {
     @apply text-slate-900 bg-white;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.site-display-font {
-    font-family: 'SUSE Mono', sans-serif;
-}
-
 h2 {
     @apply text-2xl lg:text-4xl font-semibold;
 }
@@ -68,6 +58,24 @@ p {
     }
     to {
         opacity: 1;
+    }
+}
+
+@keyframes caseStudyImageFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes caseStudyImageFadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
     }
 }
 

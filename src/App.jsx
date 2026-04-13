@@ -137,7 +137,9 @@ function App() {
             </div>
           </div>
         </main>
-        <Footer />
+        <div className={location.pathname === CONTACT_ROUTE_PATH ? 'relative z-[170]' : ''}>
+          <Footer />
+        </div>
       </div>
     </>
   )
