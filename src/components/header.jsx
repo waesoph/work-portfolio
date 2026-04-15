@@ -8,16 +8,30 @@ const navItems = [
 ]
 
 function getLetterOutlineStyle(isActive) {
+  const outlineColor = isActive ? '#000000' : '#ffffff'
+  const textShadow = [
+    `-1.25px 0 0 ${outlineColor}`,
+    `1.25px 0 0 ${outlineColor}`,
+    `0 -1.25px 0 ${outlineColor}`,
+    `0 1.25px 0 ${outlineColor}`,
+    `-1px -1px 0 ${outlineColor}`,
+    `1px -1px 0 ${outlineColor}`,
+    `-1px 1px 0 ${outlineColor}`,
+    `1px 1px 0 ${outlineColor}`,
+  ].join(', ')
+
   if (isActive) {
     return {
       color: '#ffffff',
-      WebkitTextStroke: '2px #000000',
+      WebkitTextStroke: '0 transparent',
+      textShadow,
     }
   }
 
   return {
     color: '#000000',
-    WebkitTextStroke: '2px #ffffff',
+    WebkitTextStroke: '0 transparent',
+    textShadow,
   }
 }
 
@@ -70,7 +84,7 @@ export default function Header({ onNavItemSelect = null, isContactRoute = false 
                   onNavItemSelect({ event, to: item.to, label: item.label })
                 }
               }}
-              className="flex min-h-[60px] items-center justify-center px-2 py-3 text-center text-[clamp(1.25rem,5.1vw,7rem)] font-bold leading-none tracking-tight transition-transform duration-300 hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-h-[88px] sm:px-3 sm:py-4 lg:min-h-[148px] lg:px-6 lg:py-6"
+              className="site-nav-link flex min-h-[60px] items-center justify-center px-2 py-3 text-center text-[clamp(1.25rem,5.1vw,7rem)] font-bold leading-none tracking-tight transition-transform duration-300 hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-h-[88px] sm:px-3 sm:py-4 lg:min-h-[148px] lg:px-6 lg:py-6"
               style={({ isActive }) =>
                 getLetterOutlineStyle(isActive)
               }

@@ -232,7 +232,7 @@ function getIntroPhraseMotionStyle(isPhraseDocked, isDesktopCaseStudyLayout) {
   if (isPhraseDocked) {
     return {
       left: '3.5rem',
-      top: '14rem',
+      top: '12rem',
       transform: 'translate3d(0, 0, 0)',
       fontSize: 'clamp(1.6rem, 2.2vw, 2.6rem)',
     }

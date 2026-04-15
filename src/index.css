@@ -4,6 +4,16 @@
 
 }
 
+.site-nav-link {
+    font-family:
+        "Azeret Mono",
+        "Arial Black",
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+    letter-spacing: 0.01em;
+}
+
 body {
     @apply text-slate-900 bg-white;
 }
