@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
 function LinkedInIcon() {
   return (
@@ -25,7 +26,17 @@ function MailIcon() {
 }
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' })
+  const location = useLocation()
+  const prefillMessage = useMemo(() => {
+    const stateValue = location?.state?.prefillMessage
+    return typeof stateValue === 'string' ? stateValue : ''
+  }, [location?.state?.prefillMessage])
+
+  const [formData, setFormData] = useState(() => ({
+    name: '',
+    email: '',
+    message: prefillMessage,
+  }))
   const [status, setStatus] = useState({ state: 'idle', message: '' })
 
   const handleChange = (event) => {
@@ -89,10 +100,10 @@ export default function Contact() {
   return (
     <section className="relative w-full overflow-hidden bg-black" id="contact">
       <div className="grid grid-cols-1 lg:grid-cols-2">
-        <div className="bg-white px-6 py-14 sm:px-10 lg:px-14 lg:py-20 lg:pb-100">
+        <div className="bg-white px-6 pt-8 pb-14 sm:px-10 sm:pt-12 sm:pb-14 lg:px-14 lg:py-20 lg:pb-100">
           <div className="contact-left-content mx-auto w-full max-w-2xl">
             <div className="mb-10 text-left">
-              <h2 className="mt-6 text-4xl font-bold tracking-[0.14em] text-slate-950 uppercase sm:text-5xl">
+              <h2 className="mt-2 text-4xl font-bold tracking-[0.14em] text-slate-950 uppercase sm:mt-6 sm:text-5xl">
                 Ready to collaborate?
               </h2>
             </div>

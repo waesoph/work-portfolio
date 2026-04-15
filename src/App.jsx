@@ -20,6 +20,7 @@ function App() {
   const transitionTimersRef = useRef([])
   const [contentPhase, setContentPhase] = useState('visible')
   const [contactTransitionRunId, setContactTransitionRunId] = useState(0)
+  const isAboutRoute = location.pathname === '/about'
 
   const clearTransitionTimers = useCallback(() => {
     transitionTimersRef.current.forEach((timerId) => window.clearTimeout(timerId))
@@ -115,9 +116,17 @@ function App() {
             </div>
           </>
         ) : null}
-        <main id="main-content" className="flex flex-1 flex-col">
+        <main
+          id="main-content"
+          className={isAboutRoute ? 'flex flex-col' : 'flex min-h-0 flex-1 flex-col'}
+          style={
+            isAboutRoute
+              ? { minHeight: 'calc(100dvh - var(--site-header-height, 0px))' }
+              : undefined
+          }
+        >
           <div
-            className={`flex flex-1 flex-col ${
+            className={`flex min-h-0 flex-1 flex-col ${
               contentPhase === 'hidden'
                 ? 'pointer-events-none opacity-0 transition-none'
                 : contentPhase === 'revealing'
@@ -125,7 +134,7 @@ function App() {
                   : 'opacity-100 transition-none'
             }`}
           >
-            <div id="page-content" tabIndex="-1" className="flex-1 focus:outline-none">
+            <div id="page-content" tabIndex="-1" className="min-h-0 flex-1 focus:outline-none">
               <Routes>
                 <Route path="/" element={<Navigate to="/about" replace />} />
                 <Route path="/about" element={<Home />} />

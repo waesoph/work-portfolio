@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 
 const navItems = [
@@ -21,8 +22,43 @@ function getLetterOutlineStyle(isActive) {
 }
 
 export default function Header({ onNavItemSelect = null, isContactRoute = false }) {
+  const headerRef = useRef(null)
+
+  useEffect(() => {
+    const headerElement = headerRef.current
+    if (!headerElement || typeof window === 'undefined') {
+      return undefined
+    }
+
+    const updateHeaderHeightVar = () => {
+      const headerHeight = headerElement.offsetHeight
+      document.documentElement.style.setProperty('--site-header-height', `${headerHeight}px`)
+    }
+
+    updateHeaderHeightVar()
+
+    if (typeof window.ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateHeaderHeightVar)
+      return () => {
+        window.removeEventListener('resize', updateHeaderHeightVar)
+      }
+    }
+
+    const resizeObserver = new window.ResizeObserver(updateHeaderHeightVar)
+    resizeObserver.observe(headerElement)
+    window.addEventListener('resize', updateHeaderHeightVar)
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener('resize', updateHeaderHeightVar)
+    }
+  }, [])
+
   return (
-    <header className={`relative z-[120] bg-black ${isContactRoute ? 'contact-split-header' : ''}`}>
+    <header
+      ref={headerRef}
+      className={`relative z-[120] bg-black ${isContactRoute ? 'contact-split-header' : ''}`}
+    >
       <div data-header-bar="true" className="relative z-10 mx-auto w-full px-3 py-3 sm:px-6 sm:py-5 lg:px-10 lg:py-7">
         <nav aria-label="Primary navigation" className="grid grid-cols-3 gap-2 sm:gap-4 lg:gap-6">
           {navItems.map((item) => (

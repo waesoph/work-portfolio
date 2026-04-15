@@ -21,6 +21,9 @@ import mwnScreenshot from './mwn-screenshot.jpg';
 import outpostLogo from './outpost-logo.svg';
 import outpostScreenshot from './outpost-screenshot.jpg';
 import parcLogo from './parc-logo.jpeg';
+import parcCaseStudy1 from './parc-1.jpg';
+import parcCaseStudy2 from './parc-2.png';
+import parcCaseStudy3 from './parc-3.jpg';
 import pelcoLogo from './pelco-logo.png';
 import pelcoScreenshot from './pelco-screenshot.jpg';
 import susanBilbeyLogo from './susan-bilbey-logo.svg';
@@ -31,7 +34,6 @@ import vccCaseStudy2 from './vcc-2.jpg';
 import vccCaseStudy3 from './vcc-3.jpg';
 import corecareLogo from './corecare-logo.png';
 import corecareScreenshot from './corecare-screenshot.jpg';
-import parcHomepageScreenshot from '../services/customWebsite/parc-homepage.webp';
 import rmhbcLogo from './rmhbc-logo.png';
 import rmhbcScreenshot from './rmhbc-screenshot.jpg';
 
@@ -40,13 +42,51 @@ export const clients = [
   {
     name: 'PARC Retirement Living',
     logo: parcLogo,
-    screenshot: parcHomepageScreenshot,
+    screenshot: parcCaseStudy1,
     url: 'https://parcliving.ca',
     work: ['website-rewrite', 'landing-pages', 'chatbot', 'backend', 'hosting', 'accessibility', 'site-optimization'],
     caseStudy: {
-      phrase: 'Optimized.',
-      copy: ['incoming'],
-      images: [{ id: 'hero', at: 0, src: parcHomepageScreenshot }],
+      phrase: 'Streamlined',
+      copy: [],
+      sections: [
+        {
+          heading: 'Streamlined',
+          image: parcCaseStudy1,
+          copy: [
+            'Don’t fix what isn’t broken. But also make sure it won’t break.',
+            'PARC Retirement Living’s website was doing its job well. It looked good, worked well, and consistently brought in new leads. From the outside, there was no obvious reason to change it.',
+            'The real issue was the systems underneath. PARC’s web presence was built as a multisite, with one base website and eight residence sites. Each of the nine sites was running its own separate code and theme. Therefore, any change that affected the full network had to be repeated nine times, which made updates slow, expensive, and easy to mess up.',
+            'On top of that, there was no version control or proper deployment workflow. Changes were being made by directly editing files on the server, which can be dangerous and easily lead to mistakes.',
+            'Nothing felt broken to the user, but behind the scenes the setup was difficult to maintain and getting more expensive.',
+          ],
+        },
+        {
+          heading: 'Rewritten, Not Rebuilt',
+          image: parcCaseStudy2,
+          copy: [
+            'The answer was not to start over. It was to rebuild the same experience in a smarter way.',
+            'I recreated the multisite so that to a repeat visitor, almost nothing would feel different. Behind the scenes, everything was improved.',
+            'An upgraded server made it faster.',
+            'Implementing version control gave us a recorded history of changes.',
+            'A proper deployment process reduced mistakes.',
+            'Modern coding languages ensure the website will have a long life.',
+            'Most importantly, the nine themes were consolidated into one cohesive WordPress theme. This improved consistency, and vastly reduced the cost and effort required to make changes in the future.',
+          ],
+        },
+        {
+          heading: 'The Cherry on Top',
+          image: parcCaseStudy3,
+          copy: [
+            'The updated website wasn’t exactly the same, it came with one major upgrade — an AI powered chatbot capable of answering visitors’ most frequently asked questions. The chatbot bases its answers on a bank of questions which PARC is able to update as they see fit. It is able to calculate whether the question being asked is close to an answer it has, and provide correct information every time. If it doesn’t have the answer, it helpfully directs the user to PARC’s contact page.',
+            'More recently, I have developed a full dashboard of analytics for PARC to use. It helps them in knowing what people are asking about, how often, and how often it’s being successfully answered by the chatbot. This provides useful data for them to inform future marketing campaigns and changes to their digital materials.',
+          ],
+        },
+      ],
+      images: [
+        { id: 'parc-1', at: 0, src: parcCaseStudy1 },
+        { id: 'parc-2', at: 0.34, src: parcCaseStudy2 },
+        { id: 'parc-3', at: 0.67, src: parcCaseStudy3 },
+      ],
     },
   },
   {
@@ -106,7 +146,7 @@ export const clients = [
     work: ['full-website', 'design', 'page-builder', 'backend', 'hosting', 'site-optimization'],
     caseStudy: {
       phrase: 'A - Z',
-      copy: ['incoming'],
+      copy: ['Case study under construction.'],
       images: [{ id: 'hero', at: 0, src: corecareScreenshot }],
     },
   },  
