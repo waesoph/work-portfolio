@@ -9,14 +9,13 @@ const CASE_STUDY_PANEL_ID = 'client-case-study-panel'
 const CASE_STUDY_ANIMATION_MS = 620
 const CASE_STUDY_CONTENT_FADE_MS = 500
 const CASE_STUDY_CONTENT_EXIT_FADE_MS = CASE_STUDY_CONTENT_FADE_MS + 40
-const CASE_STUDY_PHRASE_START_DELAY_MS = 0
 const CASE_STUDY_PHRASE_SLIDE_MS = 860
-const CASE_STUDY_CONTENT_REVEAL_DELAY_MS =
-  CASE_STUDY_PHRASE_START_DELAY_MS + CASE_STUDY_PHRASE_SLIDE_MS + 120
+const CASE_STUDY_CONTENT_REVEAL_DELAY_MS = CASE_STUDY_PHRASE_SLIDE_MS + 120
 const CASE_STUDY_PHRASE_OVERLAY_HIDE_DELAY_MS = 340
 const CASE_STUDY_CLOSE_RETURN_MS = Math.max(CASE_STUDY_ANIMATION_MS, CASE_STUDY_PHRASE_SLIDE_MS)
 const CASE_STUDY_IMAGE_FADE_MS = 900
 const CASE_STUDY_HEADER_ACTIVATION_OFFSET_PX = 108
+const CASE_STUDY_PHRASE_TARGET_Y_OFFSET_PX = 6
 const WORK_CARD_ENTRY_INITIAL_DELAY_MS = 560
 const WORK_CARD_ENTRY_STAGGER_MS = 150
 
@@ -128,27 +127,6 @@ function getCaseStudyImageSource(client, scrollProgress) {
   return resolvedFrameSrc
 }
 
-function toReadableWorkLabel(keyword) {
-  return String(keyword)
-    .trim()
-    .replaceAll('-', ' ')
-    .replace(/\b\w/g, (letter) => letter.toUpperCase())
-}
-
-function buildDefaultCaseStudyParagraphs(client) {
-  const workTypes = Array.isArray(client.work)
-    ? client.work.filter(Boolean).map(toReadableWorkLabel)
-    : []
-  const workSummary = workTypes.length > 0 ? workTypes.join(', ') : 'Custom Website Development'
-
-  return [
-    `${client.name} came in with a clear objective to improve the digital experience and better align the website with customer behavior. The broader goal was to create a presence that felt easier to navigate, easier to maintain internally, and more clearly aligned to what visitors were actually trying to do when they landed on key pages.`,
-    `The scope included ${workSummary}, with a strong emphasis on clean execution, clear user flows, and maintainable implementation. This included careful planning around content structure, component flexibility, and implementation patterns that would let the team extend the site over time without introducing unnecessary complexity or regressions.`,
-    `The project focused on reducing friction, clarifying hierarchy, and creating a more intuitive experience across device sizes. We also used this pass to simplify navigation paths, make core interactions more obvious, and strengthen visual rhythm so users could move through key journeys with less cognitive load and fewer drop-off points.`,
-    `This is placeholder case study copy for now. Replace these paragraphs with project-specific details, outcomes, and technical decisions. You can expand this section with measurable results, before-and-after context, architecture choices, and lessons learned to create a complete narrative that supports both portfolio storytelling and technical depth.`,
-  ]
-}
-
 function buildCaseStudySections(client, paragraphs) {
   if (!client) {
     return []
@@ -182,27 +160,6 @@ function buildCaseStudySections(client, paragraphs) {
   }
 
   const validParagraphs = Array.isArray(paragraphs) ? paragraphs.filter(Boolean) : []
-  const midHeading = String(client?.caseStudy?.midHeading || '').trim()
-  const midpointIndex = midHeading ? Math.ceil(validParagraphs.length / 2) : -1
-
-  if (midHeading) {
-    return [
-      {
-        key: 'section-1',
-        at: 0,
-        image: getCaseStudyImageSource(client, 0),
-        heading: phrase,
-        paragraphs: validParagraphs.slice(0, midpointIndex),
-      },
-      {
-        key: 'section-2',
-        at: 0.5,
-        image: getCaseStudyImageSource(client, 0.5),
-        heading: midHeading,
-        paragraphs: validParagraphs.slice(midpointIndex),
-      },
-    ].filter((section) => section.heading || section.paragraphs.length > 0)
-  }
 
   return [
     {
@@ -406,11 +363,9 @@ export default function Work() {
         return []
       }
 
-      const configuredCopy = Array.isArray(activeClient.caseStudy?.copy)
+      return Array.isArray(activeClient.caseStudy?.copy)
         ? activeClient.caseStudy.copy.filter(Boolean)
         : []
-
-      return configuredCopy.length > 0 ? configuredCopy : buildDefaultCaseStudyParagraphs(activeClient)
     },
     [activeClient],
   )
@@ -776,7 +731,7 @@ export default function Work() {
     ...(isDesktopCaseStudyLayout && caseStudyPhraseDocked && caseStudyPhraseTargetPosition
       ? {
           left: `${caseStudyPhraseTargetPosition.left}px`,
-          top: `${caseStudyPhraseTargetPosition.top}px`,
+          top: `${caseStudyPhraseTargetPosition.top - CASE_STUDY_PHRASE_TARGET_Y_OFFSET_PX}px`,
           transform: 'translate3d(0, 0, 0)',
           fontSize: 'clamp(1.6rem, 2.2vw, 2.6rem)',
         }
@@ -997,7 +952,7 @@ export default function Work() {
                       <div
                         ref={caseStudyTextScrollContainerRef}
                         onScroll={handleCaseStudyTextScroll}
-                        className="case-study-scrollbar-hidden h-full overflow-y-auto bg-black px-6 pb-[42vh] sm:px-10 sm:pb-[38vh] lg:px-14 lg:pb-[34vh]"
+                        className="case-study-scrollbar-hidden h-full overflow-y-auto bg-black px-6 pb-[62vh] sm:px-10 sm:pb-[56vh] lg:px-14 lg:pb-[50vh]"
                       >
                         <div className="w-full text-left lg:ml-auto lg:mr-0 lg:max-w-[800px]">
                           <div

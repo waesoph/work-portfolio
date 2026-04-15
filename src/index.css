@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-@theme {
-
-}
-
 .site-nav-link {
     font-family:
         "Azeret Mono",
@@ -32,10 +28,6 @@ a:not([class]) {
 
 p {
     @apply text-slate-700;
-}
-
-.container {
-    @apply max-w-7xl px-6 mx-auto;
 }
 
 .section {
