@@ -5,6 +5,7 @@ import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-
 import Home from './pages/Home.jsx'
 import Work from './pages/Work.jsx'
 import Contact from './pages/Contact.jsx'
+import NotFound from './pages/NotFound.jsx'
 
 const PAGE_REVEAL_DELAY_MS = 160
 const PAGE_FADE_IN_MS = 420
@@ -142,6 +143,7 @@ function App() {
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/:slug" element={<Work />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
           </div>

@@ -4,6 +4,7 @@ import svgr from 'vite-plugin-svgr'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Custom domain (aesoph.ca) serves from site root.
   base: '/',
   plugins: [react(), svgr()],
 })
