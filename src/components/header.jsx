@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 const navItems = [
   { to: '/work', label: 'WORK' },
   { to: '/contact', label: 'CONTACT' },
-  { to: '/about', label: 'ABOUT' },
+  { to: '/', label: 'ABOUT' },
 ]
 
 function getLetterOutlineStyle(isActive) {
@@ -79,6 +79,7 @@ export default function Header({ onNavItemSelect = null, isContactRoute = false 
             <NavLink
               key={item.to}
               to={item.to}
+              end={item.to === '/'}
               onClick={(event) => {
                 if (typeof onNavItemSelect === 'function') {
                   onNavItemSelect({ event, to: item.to, label: item.label })

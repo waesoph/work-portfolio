@@ -2,6 +2,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate, useParams } from 'react-router-dom'
 import { clients } from '../assets/images/clients'
+import {
+  CASE_STUDY_CLIENT_TO_ROUTE,
+  CASE_STUDY_ROUTE_TO_CLIENT,
+  FEATURED_CASE_STUDY_ROUTES,
+  FEATURED_CLIENT_NAMES,
+} from '../data/caseStudies.js'
 
 const CARD_MAX_ROTATION_DEG = 8
 const CARD_MAX_TRANSLATION_PX = 10
@@ -18,21 +24,6 @@ const CASE_STUDY_HEADER_ACTIVATION_OFFSET_PX = 108
 const CASE_STUDY_PHRASE_TARGET_Y_OFFSET_PX = 6
 const WORK_CARD_ENTRY_INITIAL_DELAY_MS = 560
 const WORK_CARD_ENTRY_STAGGER_MS = 150
-
-const FEATURED_CASE_STUDY_ROUTES = [
-  { name: 'Athens Creek Retirement Lodge', slug: 'athens-creek' },
-  { name: 'CoreCare', slug: 'corecare' },
-  { name: 'Vancouver Convention Centre', slug: 'vancouver-convention-centre' },
-  { name: 'PARC Retirement Living', slug: 'parcliving' },
-]
-
-const FEATURED_CLIENT_NAMES = FEATURED_CASE_STUDY_ROUTES.map(({ name }) => name)
-const CASE_STUDY_ROUTE_TO_CLIENT = Object.fromEntries(
-  FEATURED_CASE_STUDY_ROUTES.map(({ name, slug }) => [slug, name]),
-)
-const CASE_STUDY_CLIENT_TO_ROUTE = Object.fromEntries(
-  FEATURED_CASE_STUDY_ROUTES.map(({ name, slug }) => [name, slug]),
-)
 
 function prefersReducedMotion() {
   return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -339,6 +330,12 @@ export default function Work() {
     () => (slug ? CASE_STUDY_ROUTE_TO_CLIENT[slug] ?? null : null),
     [slug],
   )
+
+  useEffect(() => {
+    if (slug && !routeClientName) {
+      navigate('/work', { replace: true })
+    }
+  }, [navigate, routeClientName, slug])
 
   const featuredClients = useMemo(
     () => FEATURED_CASE_STUDY_ROUTES
@@ -746,7 +743,10 @@ export default function Work() {
       : 'translate3d(0px, 0px, 0) scale(1, 1)'
 
   return (
-    <section className="section w-full bg-black">
+    <section className="section w-full bg-black" aria-labelledby="work-heading">
+      <h1 id="work-heading" className="sr-only">
+        Web Development Portfolio and Case Studies by Will Aesoph
+      </h1>
       <div className="mx-auto w-full px-3 sm:px-6 lg:px-10">
         <ul className="grid grid-cols-1 gap-3 xl:grid-cols-2 xl:gap-3">
           {featuredClients.map((client, index) => (

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Header from './components/header.jsx'
 import Footer from './components/footer.jsx'
+import Seo from './components/Seo.jsx'
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import Work from './pages/Work.jsx'
@@ -21,7 +22,7 @@ function App() {
   const transitionTimersRef = useRef([])
   const [contentPhase, setContentPhase] = useState('visible')
   const [contactTransitionRunId, setContactTransitionRunId] = useState(0)
-  const isAboutRoute = location.pathname === '/about'
+  const isAboutRoute = location.pathname === '/about' || location.pathname === '/'
 
   const clearTransitionTimers = useCallback(() => {
     transitionTimersRef.current.forEach((timerId) => window.clearTimeout(timerId))
@@ -86,6 +87,7 @@ function App() {
 
   return (
     <>
+      <Seo />
       <div className="flex min-h-screen flex-col bg-black">
         <a
           href="#page-content"
@@ -137,8 +139,8 @@ function App() {
           >
             <div id="page-content" tabIndex="-1" className="min-h-0 flex-1 focus:outline-none">
               <Routes>
-                <Route path="/" element={<Navigate to="/about" replace />} />
-                <Route path="/about" element={<Home />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<Navigate to="/" replace />} />
                 <Route path="/services" element={<Navigate to="/work" replace />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/:slug" element={<Work />} />

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export default function NotFound() {
   return (
     <section className="flex min-h-[calc(100dvh-var(--site-header-height,0px))] w-full items-start bg-black text-white">
@@ -8,6 +10,14 @@ export default function NotFound() {
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-base text-white sm:text-lg">
           Whatever you were looking for has left the chat. Probably to grab coffee.
+        </p>
+        <p className="mt-8">
+          <Link
+            to="/"
+            className="inline-flex border border-white px-5 py-2 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-white hover:text-black"
+          >
+            Back to About
+          </Link>
         </p>
       </div>
     </section>

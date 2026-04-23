@@ -933,11 +933,15 @@ export default function Home() {
     <section
       className="relative flex w-full shrink-0 overflow-hidden bg-black text-white"
       id="about"
+      aria-labelledby="about-heading"
       style={{
         height: 'calc(100dvh - var(--site-header-height, 0px))',
         maxHeight: 'calc(100dvh - var(--site-header-height, 0px))',
       }}
     >
+      <h1 id="about-heading" className="sr-only">
+        Will Aesoph is a web developer focused on custom websites and technical SEO
+      </h1>
       <div className="mx-auto flex h-full min-h-0 w-full max-w-6xl flex-1 px-5 pt-2 pb-4 sm:px-8 sm:pt-3 sm:pb-6 lg:px-10 lg:pt-4 lg:pb-8">
         <div className="relative flex min-h-0 w-full flex-1 overflow-hidden border-y border-white/25 bg-black/80">
           <div

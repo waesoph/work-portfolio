@@ -98,14 +98,21 @@ export default function Contact() {
   ]
 
   return (
-    <section className="relative w-full overflow-hidden bg-black" id="contact">
+    <section
+      className="relative w-full overflow-hidden bg-black"
+      id="contact"
+      aria-labelledby="contact-heading"
+    >
       <div className="grid grid-cols-1 lg:grid-cols-2">
         <div className="bg-white px-6 pt-8 pb-14 sm:px-10 sm:pt-12 sm:pb-14 lg:px-14 lg:py-20 lg:pb-100">
           <div className="contact-left-content mx-auto w-full max-w-2xl">
             <div className="mb-10 text-left">
-              <h2 className="mt-2 text-4xl font-bold tracking-[0.14em] text-slate-950 uppercase sm:mt-6 sm:text-5xl">
+              <h1
+                id="contact-heading"
+                className="mt-2 text-4xl font-bold tracking-[0.14em] text-slate-950 uppercase sm:mt-6 sm:text-5xl"
+              >
                 Ready to collaborate?
-              </h2>
+              </h1>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-7">

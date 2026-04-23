@@ -1,0 +1,41 @@
+# Will Aesoph - Full LLM Reference
+
+Generated: 2026-04-23
+Canonical site URL: https://aesoph.ca
+
+## Site Purpose
+Will Aesoph is a Canadian web developer helping businesses with custom websites, technical SEO, and digital growth.
+
+## Service Areas
+- Custom website design and development
+- Website rebuilds and migration projects
+- On-page technical SEO improvements
+- Performance optimization and accessibility
+- Analytics, lead generation, and web strategy
+
+## Public Pages
+- About: https://aesoph.ca/
+  Summary: Custom websites, web strategy, and technical SEO from Will Aesoph. View recent work and connect for new projects.
+- Work: https://aesoph.ca/work
+  Summary: Explore web development projects and case studies spanning website rebuilds, lead generation, and scalable content systems.
+- Contact: https://aesoph.ca/contact
+  Summary: Start a project with Will Aesoph. Reach out for website development, technical SEO, and digital growth support.
+
+## Case Study Details
+- Athens Creek Retirement Lodge
+  URL: https://aesoph.ca/work/athens-creek
+  Summary: Created a focused retirement-lodge website strategy designed to capture qualified leads quickly and clearly.
+- CoreCare
+  URL: https://aesoph.ca/work/corecare
+  Summary: Delivered a complete website build for CoreCare from design through launch, with a focus on speed and reliability.
+- Vancouver Convention Centre
+  URL: https://aesoph.ca/work/vancouver-convention-centre
+  Summary: Developed reusable templates and content tooling for a 500+ page website to reduce publishing friction.
+- PARC Retirement Living
+  URL: https://aesoph.ca/work/parcliving
+  Summary: Refactored a multi-site platform into a maintainable, version-controlled system while preserving user experience.
+
+## Contact
+- Email: willaesoph@gmail.com
+- LinkedIn: https://www.linkedin.com/in/will-aesoph
+- GitHub: https://github.com/waesoph

@@ -1,0 +1,27 @@
+# Will Aesoph
+> Will Aesoph is a Canadian web developer helping businesses with custom websites, technical SEO, and digital growth.
+
+Website: https://aesoph.ca
+Email: willaesoph@gmail.com
+
+## Primary Pages
+- [About](https://aesoph.ca/): Custom websites, web strategy, and technical SEO from Will Aesoph. View recent work and connect for new projects.
+- [Work](https://aesoph.ca/work): Explore web development projects and case studies spanning website rebuilds, lead generation, and scalable content systems.
+- [Contact](https://aesoph.ca/contact): Start a project with Will Aesoph. Reach out for website development, technical SEO, and digital growth support.
+
+## Featured Case Studies
+- [Athens Creek Retirement Lodge](https://aesoph.ca/work/athens-creek): Created a focused retirement-lodge website strategy designed to capture qualified leads quickly and clearly.
+- [CoreCare](https://aesoph.ca/work/corecare): Delivered a complete website build for CoreCare from design through launch, with a focus on speed and reliability.
+- [Vancouver Convention Centre](https://aesoph.ca/work/vancouver-convention-centre): Developed reusable templates and content tooling for a 500+ page website to reduce publishing friction.
+- [PARC Retirement Living](https://aesoph.ca/work/parcliving): Refactored a multi-site platform into a maintainable, version-controlled system while preserving user experience.
+
+## Services
+- Custom website design and development
+- Website rebuilds and migration projects
+- On-page technical SEO improvements
+- Performance optimization and accessibility
+- Analytics, lead generation, and web strategy
+
+## Profiles
+- LinkedIn: https://www.linkedin.com/in/will-aesoph
+- GitHub: https://github.com/waesoph
