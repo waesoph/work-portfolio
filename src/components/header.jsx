@@ -2,9 +2,10 @@ import { useEffect, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 
 const navItems = [
+  { to: '/', label: 'HOME' },
   { to: '/work', label: 'WORK' },
+  { to: '/about', label: 'ABOUT' },
   { to: '/contact', label: 'CONTACT' },
-  { to: '/', label: 'ABOUT' },
 ]
 
 function getLetterOutlineStyle(isActive) {
@@ -73,8 +74,11 @@ export default function Header({ onNavItemSelect = null, isContactRoute = false 
       ref={headerRef}
       className={`relative z-[120] bg-black ${isContactRoute ? 'contact-split-header' : ''}`}
     >
-      <div data-header-bar="true" className="relative z-10 mx-auto w-full px-3 py-3 sm:px-6 sm:py-5 lg:px-10 lg:py-7">
-        <nav aria-label="Primary navigation" className="grid grid-cols-3 gap-2 sm:gap-4 lg:gap-6">
+      <div data-header-bar="true" className="relative z-10 mx-auto w-full px-3 py-2 sm:px-6 sm:py-5 lg:px-10 lg:py-7">
+        <nav
+          aria-label="Primary navigation"
+          className="grid grid-cols-4 gap-1 sm:gap-4 lg:gap-6"
+        >
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -85,7 +89,7 @@ export default function Header({ onNavItemSelect = null, isContactRoute = false 
                   onNavItemSelect({ event, to: item.to, label: item.label })
                 }
               }}
-              className="site-nav-link flex min-h-[60px] items-center justify-center px-2 py-3 text-center text-[clamp(1.25rem,5.1vw,7rem)] font-bold leading-none tracking-tight transition-transform duration-300 hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-h-[88px] sm:px-3 sm:py-4 lg:min-h-[148px] lg:px-6 lg:py-6"
+              className="site-nav-link flex min-h-[42px] items-center justify-center px-1 py-2 text-center text-[1rem] font-bold leading-none tracking-tight transition-transform duration-300 hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:min-h-[82px] sm:px-3 sm:py-4 sm:text-[clamp(1.05rem,4.6vw,4.8rem)] lg:min-h-[132px] lg:px-6 lg:py-6"
               style={({ isActive }) =>
                 getLetterOutlineStyle(isActive)
               }

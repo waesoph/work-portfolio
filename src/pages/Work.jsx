@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { clients } from '../assets/images/clients'
 import {
   CASE_STUDY_CLIENT_TO_ROUTE,
@@ -24,6 +24,12 @@ const CASE_STUDY_HEADER_ACTIVATION_OFFSET_PX = 108
 const CASE_STUDY_PHRASE_TARGET_Y_OFFSET_PX = 6
 const WORK_CARD_ENTRY_INITIAL_DELAY_MS = 560
 const WORK_CARD_ENTRY_STAGGER_MS = 150
+const CASE_STUDY_HOVER_SUMMARIES = Object.fromEntries(
+  FEATURED_CASE_STUDY_ROUTES.map((caseStudy) => [
+    caseStudy.name,
+    caseStudy.hoverSummary ?? caseStudy.llmSummary,
+  ]),
+)
 
 function prefersReducedMotion() {
   return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -165,6 +171,10 @@ function buildCaseStudySections(client, paragraphs) {
 
 function getCaseStudyPhrase(client) {
   return client.caseStudy?.phrase || 'Simple can be better'
+}
+
+function getCaseStudyHoverSummary(client) {
+  return CASE_STUDY_HOVER_SUMMARIES[client.name] || ''
 }
 
 function getIntroPhraseMotionStyle(isPhraseDocked, isDesktopCaseStudyLayout) {
@@ -743,7 +753,7 @@ export default function Work() {
       : 'translate3d(0px, 0px, 0) scale(1, 1)'
 
   return (
-    <section className="section w-full bg-black" aria-labelledby="work-heading">
+    <section id="case-studies" className="section w-full bg-black" aria-labelledby="work-heading">
       <h1 id="work-heading" className="sr-only">
         Web Development Portfolio and Case Studies by Will Aesoph
       </h1>
@@ -751,7 +761,7 @@ export default function Work() {
         <ul className="grid grid-cols-1 gap-3 xl:grid-cols-2 xl:gap-3">
           {featuredClients.map((client, index) => (
             <li key={client.name}>
-              <button
+              <Link
                 ref={(node) => {
                   if (node) {
                     cardRefs.current.set(client.name, node)
@@ -759,14 +769,27 @@ export default function Work() {
                     cardRefs.current.delete(client.name)
                   }
                 }}
-                type="button"
+                to={`/work/${CASE_STUDY_CLIENT_TO_ROUTE[client.name]}`}
                 aria-label={`Open case study for ${client.name}`}
                 aria-haspopup="dialog"
                 aria-controls={CASE_STUDY_PANEL_ID}
-                onClick={(event) => openCaseStudy(client.name, event.currentTarget)}
+                onClick={(event) => {
+                  if (
+                    event.metaKey ||
+                    event.ctrlKey ||
+                    event.shiftKey ||
+                    event.altKey ||
+                    event.button !== 0
+                  ) {
+                    return
+                  }
+
+                  event.preventDefault()
+                  openCaseStudy(client.name, event.currentTarget)
+                }}
                 onPointerMove={handleCardPointerMove}
                 onPointerLeave={resetCardMotion}
-                className="work-card-enter group relative isolate h-[320px] w-full cursor-pointer overflow-hidden rounded-none border border-slate-200 bg-white text-left shadow-[0_24px_62px_-34px_rgba(15,23,42,0.38)] motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out sm:h-[380px] lg:h-[430px]"
+                className="work-card-enter group relative isolate block h-[320px] w-full cursor-pointer overflow-hidden rounded-none border border-slate-200 bg-white text-left shadow-[0_24px_62px_-34px_rgba(15,23,42,0.38)] motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out sm:h-[380px] lg:h-[430px]"
                 style={{
                   '--card-rotate-x': '0deg',
                   '--card-rotate-y': '0deg',
@@ -789,12 +812,15 @@ export default function Work() {
                 <span className="sr-only">{client.name}</span>
 
                 <div className="pointer-events-none absolute inset-0 z-20 bg-black opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center px-6 opacity-0 transition-opacity duration-500 delay-0 group-hover:delay-250 group-hover:opacity-100">
-                  <span className="text-center text-3xl font-bold tracking-widest text-white uppercase sm:text-5xl lg:text-6xl">
+                <div className="pointer-events-none absolute inset-0 z-30 flex flex-col items-center justify-center px-6 text-center opacity-0 transition-opacity duration-500 delay-0 group-hover:delay-250 group-hover:opacity-100">
+                  <span className="text-3xl font-bold tracking-widest text-white uppercase sm:text-5xl lg:text-6xl">
                     {getCaseStudyPhrase(client)}
                   </span>
+                  <span className="mt-5 max-w-xl text-base leading-relaxed font-semibold text-slate-300 sm:text-lg lg:text-xl">
+                    {getCaseStudyHoverSummary(client)}
+                  </span>
                 </div>
-              </button>
+              </Link>
             </li>
           ))}
         </ul>
@@ -806,16 +832,27 @@ export default function Work() {
             id="other-brands-heading"
             className="text-center text-3xl font-semibold tracking-widest text-slate-900 uppercase sm:text-4xl"
           >
-            Other Brands I&apos;ve Worked With
+            From startup to enterprise<br></br>Brands I've partnered with
           </h2>
           <ul className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
             {otherBrandClients.map((client) => (
               <li key={`other-brand-${client.name}`} className="flex items-center justify-center px-4 py-2 sm:px-5 sm:py-3">
-                <img
-                  src={client.logo}
-                  alt={`${client.name} logo`}
-                  className="max-h-12 w-auto max-w-full object-contain grayscale opacity-80 transition-opacity duration-300 hover:opacity-100 sm:max-h-14"
-                />
+                <a
+                  href={client.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Open live website for ${client.name}`}
+                  className="group relative flex min-h-28 w-full items-center justify-center overflow-hidden border border-transparent p-4 transition-colors duration-300 hover:border-slate-950 focus-visible:border-slate-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-950"
+                >
+                  <img
+                    src={client.logo}
+                    alt={`${client.name} logo`}
+                    className="max-h-12 w-auto max-w-full object-contain grayscale opacity-80 transition-opacity duration-300 group-hover:opacity-35 group-focus-visible:opacity-35 sm:max-h-14"
+                  />
+                  <span className="absolute inset-0 flex items-center justify-center bg-slate-950 text-sm font-semibold tracking-[0.16em] text-white uppercase opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+                    Live Website
+                  </span>
+                </a>
               </li>
             ))}
           </ul>

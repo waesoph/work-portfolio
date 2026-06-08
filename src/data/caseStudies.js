@@ -7,6 +7,8 @@ export const FEATURED_CASE_STUDY_ROUTES = [
       'How a lean, lead-focused retirement website was delivered in six weeks to drive high-intent inquiries.',
     llmSummary:
       'Created a focused retirement-lodge website strategy designed to capture qualified leads quickly and clearly.',
+    hoverSummary:
+      'A lean retirement-lodge site built around fast clarity, simple content, and high-intent inquiries.',
   },
   {
     name: 'CoreCare',
@@ -16,6 +18,8 @@ export const FEATURED_CASE_STUDY_ROUTES = [
       'A full website build for CoreCare with design, development, performance optimization, and scalable infrastructure.',
     llmSummary:
       'Delivered a complete website build for CoreCare from design through launch, with a focus on speed and reliability.',
+    hoverSummary:
+      'A full website build shaped from early wireframes through launch.',
   },
   {
     name: 'Vancouver Convention Centre',
@@ -25,6 +29,8 @@ export const FEATURED_CASE_STUDY_ROUTES = [
       'Rebuilt a large-scale website with reusable templates and a content system that empowers non-technical teams.',
     llmSummary:
       'Developed reusable templates and content tooling for a 500+ page website to reduce publishing friction.',
+    hoverSummary:
+      'Reusable templates and content tooling for a large team managing hundreds of pages.',
   },
   {
     name: 'PARC Retirement Living',
@@ -34,6 +40,8 @@ export const FEATURED_CASE_STUDY_ROUTES = [
       'Modernized a complex multisite architecture with safer workflows, unified themes, and improved maintainability.',
     llmSummary:
       'Refactored a multi-site platform into a maintainable, version-controlled system while preserving user experience.',
+    hoverSummary:
+      'A multisite rewrite that kept the visitor experience stable while making the system easier to maintain.',
   },
 ]
 

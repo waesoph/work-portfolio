@@ -44,11 +44,15 @@ function escapeXml(value) {
 
 function routeLabel(routePath) {
   if (routePath === '/') {
-    return 'About'
+    return 'Home'
   }
 
   if (routePath === '/work') {
     return 'Work'
+  }
+
+  if (routePath === '/about') {
+    return 'About'
   }
 
   if (routePath === '/contact') {
@@ -116,7 +120,7 @@ ${hostLine}`
 
 function buildLlms() {
   const corePages = INDEXABLE_PAGES.filter((page) =>
-    ['/', '/work', '/contact'].includes(page.path),
+    ['/', '/about', '/work', '/contact'].includes(page.path),
   )
 
   const caseStudyLines = CASE_STUDY_LLM_ENTRIES.map((entry) => {
@@ -151,7 +155,7 @@ ${PRIMARY_SERVICES.map((service) => `- ${service}`).join('\n')}
 
 function buildLlmsFull(todayIsoDate) {
   const corePages = INDEXABLE_PAGES.filter((page) =>
-    ['/', '/work', '/contact'].includes(page.path),
+    ['/', '/about', '/work', '/contact'].includes(page.path),
   )
 
   const pageLines = corePages.map((page) => {

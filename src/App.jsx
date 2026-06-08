@@ -4,6 +4,7 @@ import Footer from './components/footer.jsx'
 import Seo from './components/Seo.jsx'
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import Home from './pages/Home.jsx'
+import About from './pages/About.jsx'
 import Work from './pages/Work.jsx'
 import Contact from './pages/Contact.jsx'
 import NotFound from './pages/NotFound.jsx'
@@ -22,7 +23,7 @@ function App() {
   const transitionTimersRef = useRef([])
   const [contentPhase, setContentPhase] = useState('visible')
   const [contactTransitionRunId, setContactTransitionRunId] = useState(0)
-  const isAboutRoute = location.pathname === '/about' || location.pathname === '/'
+  const isAboutRoute = location.pathname === '/about'
 
   const clearTransitionTimers = useCallback(() => {
     transitionTimersRef.current.forEach((timerId) => window.clearTimeout(timerId))
@@ -30,6 +31,21 @@ function App() {
   }, [])
 
   useEffect(() => () => clearTransitionTimers(), [clearTransitionTimers])
+
+  useEffect(() => {
+    if (!location.hash || typeof window === 'undefined') {
+      return undefined
+    }
+
+    const targetId = decodeURIComponent(location.hash.slice(1))
+    const scrollTimer = window.setTimeout(() => {
+      window.document.getElementById(targetId)?.scrollIntoView({ block: 'start' })
+    }, 0)
+
+    return () => {
+      window.clearTimeout(scrollTimer)
+    }
+  }, [location.hash, location.pathname])
 
   const handleNavItemSelect = useCallback(
     ({ event, to }) => {
@@ -140,7 +156,7 @@ function App() {
             <div id="page-content" tabIndex="-1" className="min-h-0 flex-1 focus:outline-none">
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/about" element={<Navigate to="/" replace />} />
+                <Route path="/about" element={<About />} />
                 <Route path="/services" element={<Navigate to="/work" replace />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/:slug" element={<Work />} />

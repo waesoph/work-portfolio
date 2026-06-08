@@ -1,13 +1,14 @@
 # Will Aesoph
-> Will Aesoph is a Canadian web developer helping businesses with custom websites, technical SEO, and digital growth.
+> Will Aesoph is a freelance web developer who helps businesses build custom websites, improve technical SEO, and create stronger lead-focused web systems.
 
 Website: https://aesoph.ca
 Email: willaesoph@gmail.com
 
 ## Primary Pages
-- [About](https://aesoph.ca/): Custom websites, web strategy, and technical SEO from Will Aesoph. View recent work and connect for new projects.
-- [Work](https://aesoph.ca/work): Explore web development projects and case studies spanning website rebuilds, lead generation, and scalable content systems.
-- [Contact](https://aesoph.ca/contact): Start a project with Will Aesoph. Reach out for website development, technical SEO, and digital growth support.
+- [Home](https://aesoph.ca/): Freelance web developer building custom websites, improving technical SEO, and creating lead-focused web systems for businesses locally and remotely.
+- [About](https://aesoph.ca/about): Learn about Will Aesoph, a freelance web developer focused on custom websites, technical SEO, and practical digital strategy for growing teams.
+- [Work](https://aesoph.ca/work): Explore custom website builds, rebuilds, technical SEO work, and scalable content systems from Will Aesoph.
+- [Contact](https://aesoph.ca/contact): Contact Will Aesoph for custom website development, technical SEO, performance improvements, and lead-focused digital strategy.
 
 ## Featured Case Studies
 - [Athens Creek Retirement Lodge](https://aesoph.ca/work/athens-creek): Created a focused retirement-lodge website strategy designed to capture qualified leads quickly and clearly.
@@ -18,7 +19,7 @@ Email: willaesoph@gmail.com
 ## Services
 - Custom website design and development
 - Website rebuilds and migration projects
-- On-page technical SEO improvements
+- Technical SEO audits and on-page improvements
 - Performance optimization and accessibility
 - Analytics, lead generation, and web strategy
 

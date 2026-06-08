@@ -1,19 +1,15 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import {
-  CONTACT_EMAIL,
   DEFAULT_OG_IMAGE_PATH,
-  GITHUB_URL,
-  LINKEDIN_URL,
   SITE_LANGUAGE,
   SITE_LOCALE,
   SITE_NAME,
-  SITE_SUMMARY,
-  SITE_URL,
   getCanonicalUrl,
   getRouteMetadata,
   normalizePath,
 } from '../seo/siteMetadata.js'
+import { buildStructuredDataGraph } from '../seo/structuredData.js'
 
 const JSON_LD_SCRIPT_ID = 'site-jsonld'
 const DEFAULT_ROBOTS_CONTENT = 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
@@ -101,91 +97,6 @@ function upsertStructuredData(graph) {
   })
 }
 
-function buildBreadcrumbSchema(breadcrumbItems) {
-  if (!Array.isArray(breadcrumbItems) || breadcrumbItems.length === 0) {
-    return null
-  }
-
-  return {
-    '@type': 'BreadcrumbList',
-    '@id': `${SITE_URL}/#breadcrumb`,
-    itemListElement: breadcrumbItems.map((item, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: item.name,
-      item: getCanonicalUrl(item.path),
-    })),
-  }
-}
-
-function buildSchemaGraph(pageMetadata, canonicalUrl) {
-  const webSiteId = `${SITE_URL}/#website`
-  const personId = `${SITE_URL}/#person`
-  const businessId = `${SITE_URL}/#business`
-  const webPageId = `${canonicalUrl}#webpage`
-
-  const graph = [
-    {
-      '@type': 'WebSite',
-      '@id': webSiteId,
-      name: SITE_NAME,
-      url: `${SITE_URL}/`,
-      description: SITE_SUMMARY,
-      inLanguage: SITE_LANGUAGE,
-    },
-    {
-      '@type': 'Person',
-      '@id': personId,
-      name: SITE_NAME,
-      jobTitle: 'Web Developer',
-      url: `${SITE_URL}/`,
-      sameAs: [LINKEDIN_URL, GITHUB_URL],
-      email: CONTACT_EMAIL,
-    },
-    {
-      '@type': 'ProfessionalService',
-      '@id': businessId,
-      name: SITE_NAME,
-      url: `${SITE_URL}/`,
-      email: CONTACT_EMAIL,
-      sameAs: [LINKEDIN_URL, GITHUB_URL],
-      areaServed: 'Worldwide',
-      description: SITE_SUMMARY,
-    },
-    {
-      '@type': pageMetadata.schemaType || 'WebPage',
-      '@id': webPageId,
-      url: canonicalUrl,
-      name: pageMetadata.title,
-      description: pageMetadata.description,
-      inLanguage: SITE_LANGUAGE,
-      isPartOf: { '@id': webSiteId },
-      about: { '@id': businessId },
-      mainEntity: { '@id': personId },
-    },
-  ]
-
-  const breadcrumbSchema = buildBreadcrumbSchema(pageMetadata.breadcrumb)
-  if (breadcrumbSchema) {
-    graph.push(breadcrumbSchema)
-  }
-
-  if (pageMetadata.caseStudyName) {
-    graph.push({
-      '@type': 'Article',
-      '@id': `${canonicalUrl}#article`,
-      headline: pageMetadata.caseStudyName,
-      description: pageMetadata.description,
-      mainEntityOfPage: { '@id': webPageId },
-      author: { '@id': personId },
-      publisher: { '@id': businessId },
-      inLanguage: SITE_LANGUAGE,
-    })
-  }
-
-  return graph
-}
-
 export default function Seo() {
   const location = useLocation()
 
@@ -204,7 +115,7 @@ export default function Seo() {
       : ''
 
     document.title = pageMetadata.title
-    document.documentElement.setAttribute('lang', 'en-CA')
+    document.documentElement.setAttribute('lang', SITE_LANGUAGE)
 
     upsertMetaTag('description', { name: 'description' }, pageMetadata.description)
     upsertMetaTag('robots', { name: 'robots' }, robotsContent)
@@ -237,7 +148,7 @@ export default function Seo() {
       href: canonicalUrl,
     })
 
-    upsertStructuredData(buildSchemaGraph(pageMetadata, canonicalUrl))
+    upsertStructuredData(buildStructuredDataGraph(pageMetadata, canonicalUrl))
   }, [location.pathname])
 
   return null

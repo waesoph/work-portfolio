@@ -4,91 +4,102 @@ export const SITE_NAME = 'Will Aesoph'
 export const SITE_URL = 'https://aesoph.ca'
 export const SITE_LOCALE = 'en_CA'
 export const SITE_LANGUAGE = 'en-CA'
-export const DEFAULT_OG_IMAGE_PATH = '/headshot.jpg'
+export const DEFAULT_OG_IMAGE_PATH = '/og-cover.jpg'
 export const CONTACT_EMAIL = 'willaesoph@gmail.com'
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/will-aesoph'
 export const GITHUB_URL = 'https://github.com/waesoph'
+export const SERVICE_AREAS = [
+  { type: 'City', name: 'Victoria' },
+  { type: 'AdministrativeArea', name: 'British Columbia' },
+  { type: 'Country', name: 'Canada' },
+]
 
 export const SITE_SUMMARY =
-  'Will Aesoph is a Canadian web developer helping businesses with custom websites, technical SEO, and digital growth.'
+  'Will Aesoph is a freelance web developer who helps businesses build custom websites, improve technical SEO, and create stronger lead-focused web systems.'
 
 export const PRIMARY_SERVICES = [
   'Custom website design and development',
   'Website rebuilds and migration projects',
-  'On-page technical SEO improvements',
+  'Technical SEO audits and on-page improvements',
   'Performance optimization and accessibility',
   'Analytics, lead generation, and web strategy',
 ]
 
 const DEFAULT_KEYWORDS = [
   'Will Aesoph',
-  'web developer',
   'freelance web developer',
-  'Canadian web developer',
-  'British Columbia web developer',
-  'website development',
+  'custom website developer',
+  'custom websites',
   'technical SEO',
-  'portfolio',
-  'case studies',
+  'website rebuild',
+  'web development portfolio',
+  'remote web developer',
+  'web developer victoria bc',
+  'Victoria BC web developer',
+  'freelance web developer victoria',
+  'British Columbia web developer',
 ]
 
 const ROUTE_METADATA = {
   '/': {
-    title: 'Will Aesoph | Web Developer in British Columbia',
+    title: 'Custom Websites and Technical SEO | Will Aesoph',
     description:
-      'Custom websites, web strategy, and technical SEO from Will Aesoph. View recent work and connect for new projects.',
-    keywords: DEFAULT_KEYWORDS,
+      'Freelance web developer building custom websites, improving technical SEO, and creating lead-focused web systems for businesses locally and remotely.',
+    keywords: [...DEFAULT_KEYWORDS, 'technical seo consultant', 'hire web developer'],
     canonicalPath: '/',
     ogType: 'website',
-    schemaType: 'AboutPage',
-    breadcrumb: [{ name: 'About', path: '/' }],
+    schemaType: 'WebPage',
+    breadcrumb: [{ name: 'Home', path: '/' }],
   },
   '/about': {
-    title: 'Will Aesoph | Web Developer in British Columbia',
+    title: 'About Will Aesoph | Freelance Web Developer',
     description:
-      'Custom websites, web strategy, and technical SEO from Will Aesoph. View recent work and connect for new projects.',
-    keywords: DEFAULT_KEYWORDS,
-    canonicalPath: '/',
+      'Learn about Will Aesoph, a freelance web developer focused on custom websites, technical SEO, and practical digital strategy for growing teams.',
+    keywords: [...DEFAULT_KEYWORDS, 'about will aesoph', 'freelance website developer'],
+    canonicalPath: '/about',
     ogType: 'website',
     schemaType: 'AboutPage',
-    breadcrumb: [{ name: 'About', path: '/' }],
+    breadcrumb: [
+      { name: 'Home', path: '/' },
+      { name: 'About', path: '/about' },
+    ],
   },
   '/work': {
-    title: 'Portfolio & Case Studies | Will Aesoph',
+    title: 'Web Development Portfolio | Will Aesoph',
     description:
-      'Explore web development projects and case studies spanning website rebuilds, lead generation, and scalable content systems.',
-    keywords: [...DEFAULT_KEYWORDS, 'web development portfolio', 'case study'],
+      'Explore custom website builds, rebuilds, technical SEO work, and scalable content systems from Will Aesoph.',
+    keywords: [...DEFAULT_KEYWORDS, 'case study', 'website case studies'],
     canonicalPath: '/work',
     ogType: 'website',
     schemaType: 'CollectionPage',
     breadcrumb: [
-      { name: 'About', path: '/' },
+      { name: 'Home', path: '/' },
       { name: 'Work', path: '/work' },
     ],
   },
   '/services': {
-    title: 'Portfolio & Case Studies | Will Aesoph',
+    title: 'Web Development Portfolio | Will Aesoph',
     description:
-      'Explore web development projects and case studies spanning website rebuilds, lead generation, and scalable content systems.',
-    keywords: [...DEFAULT_KEYWORDS, 'web development portfolio', 'case study'],
+      'Explore custom website builds, rebuilds, technical SEO work, and scalable content systems from Will Aesoph.',
+    keywords: [...DEFAULT_KEYWORDS, 'case study', 'website case studies'],
     canonicalPath: '/work',
     ogType: 'website',
     schemaType: 'CollectionPage',
     breadcrumb: [
-      { name: 'About', path: '/' },
+      { name: 'Home', path: '/' },
       { name: 'Work', path: '/work' },
     ],
   },
   '/contact': {
-    title: 'Contact Will Aesoph | Web Development & SEO',
+    title: 'Contact Will Aesoph | Custom Websites and Technical SEO',
     description:
-      'Start a project with Will Aesoph. Reach out for website development, technical SEO, and digital growth support.',
+      'Contact Will Aesoph for custom website development, technical SEO, performance improvements, and lead-focused digital strategy.',
     keywords: [...DEFAULT_KEYWORDS, 'contact web developer', 'hire web developer'],
     canonicalPath: '/contact',
     ogType: 'website',
     schemaType: 'ContactPage',
     breadcrumb: [
-      { name: 'About', path: '/' },
+      { name: 'Home', path: '/' },
       { name: 'Contact', path: '/contact' },
     ],
   },
@@ -107,9 +118,9 @@ const CASE_STUDY_ROUTE_METADATA = Object.fromEntries(
       ],
       canonicalPath: `/work/${caseStudy.slug}`,
       ogType: 'article',
-      schemaType: 'Article',
+      schemaType: 'WebPage',
       breadcrumb: [
-        { name: 'About', path: '/' },
+        { name: 'Home', path: '/' },
         { name: 'Work', path: '/work' },
         { name: caseStudy.name, path: `/work/${caseStudy.slug}` },
       ],
@@ -127,7 +138,7 @@ const NOT_FOUND_METADATA = {
   ogType: 'website',
   schemaType: 'WebPage',
   noIndex: true,
-  breadcrumb: [{ name: 'About', path: '/' }],
+  breadcrumb: [{ name: 'Home', path: '/' }],
 }
 
 export const INDEXABLE_PAGES = [
@@ -136,6 +147,12 @@ export const INDEXABLE_PAGES = [
     changefreq: 'weekly',
     priority: '1.0',
     description: ROUTE_METADATA['/'].description,
+  },
+  {
+    path: '/about',
+    changefreq: 'monthly',
+    priority: '0.8',
+    description: ROUTE_METADATA['/about'].description,
   },
   {
     path: '/work',
@@ -156,6 +173,12 @@ export const INDEXABLE_PAGES = [
     description: caseStudy.seoDescription,
   })),
 ]
+
+export const STATIC_HTML_PATHS = Array.from(
+  new Set(['/', '/about', ...INDEXABLE_PAGES.map((page) => page.path)]),
+)
+
+export const STATIC_REDIRECTS = [{ from: '/services', to: '/work' }]
 
 export const CASE_STUDY_LLM_ENTRIES = FEATURED_CASE_STUDY_ROUTES.map((caseStudy) => ({
   name: caseStudy.name,
