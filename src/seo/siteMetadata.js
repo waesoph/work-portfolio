@@ -77,19 +77,6 @@ const ROUTE_METADATA = {
       { name: 'Work', path: '/work' },
     ],
   },
-  '/services': {
-    title: 'Web Development Portfolio | Will Aesoph',
-    description:
-      'Explore custom website builds, rebuilds, technical SEO work, and scalable content systems from Will Aesoph.',
-    keywords: [...DEFAULT_KEYWORDS, 'case study', 'website case studies'],
-    canonicalPath: '/work',
-    ogType: 'website',
-    schemaType: 'CollectionPage',
-    breadcrumb: [
-      { name: 'Home', path: '/' },
-      { name: 'Work', path: '/work' },
-    ],
-  },
   '/contact': {
     title: 'Contact Will Aesoph | Custom Websites and Technical SEO',
     description:
@@ -177,8 +164,6 @@ export const INDEXABLE_PAGES = [
 export const STATIC_HTML_PATHS = Array.from(
   new Set(['/', '/about', ...INDEXABLE_PAGES.map((page) => page.path)]),
 )
-
-export const STATIC_REDIRECTS = [{ from: '/services', to: '/work' }]
 
 export const CASE_STUDY_LLM_ENTRIES = FEATURED_CASE_STUDY_ROUTES.map((caseStudy) => ({
   name: caseStudy.name,

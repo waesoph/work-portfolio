@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Header from './components/header.jsx'
 import Footer from './components/footer.jsx'
 import Seo from './components/Seo.jsx'
-import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import About from './pages/About.jsx'
 import Work from './pages/Work.jsx'
@@ -157,7 +157,6 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/services" element={<Navigate to="/work" replace />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/:slug" element={<Work />} />
                 <Route path="/contact" element={<Contact />} />

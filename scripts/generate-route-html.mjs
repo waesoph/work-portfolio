@@ -8,7 +8,6 @@ import {
   SITE_LOCALE,
   SITE_NAME,
   STATIC_HTML_PATHS,
-  STATIC_REDIRECTS,
   getCanonicalUrl,
   getRouteMetadata,
 } from '../src/seo/siteMetadata.js'
@@ -257,29 +256,6 @@ function buildPageHtml(templateHtml, routePath) {
   return html
 }
 
-function buildRedirectHtml(targetPath) {
-  const targetUrl = getCanonicalUrl(targetPath)
-
-  return `<!doctype html>
-<html lang="${escapeAttribute(SITE_LANGUAGE)}">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Redirecting | ${escapeHtml(SITE_NAME)}</title>
-    <meta name="robots" content="noindex, follow" />
-    <link rel="canonical" href="${escapeAttribute(targetUrl)}" />
-    <meta http-equiv="refresh" content="0; url=${escapeAttribute(targetUrl)}" />
-    <script>
-      window.location.replace(${JSON.stringify(targetUrl)})
-    </script>
-  </head>
-  <body>
-    <p>Redirecting to <a href="${escapeAttribute(targetUrl)}">${escapeHtml(targetUrl)}</a>.</p>
-  </body>
-</html>
-`
-}
-
 async function writeRouteFile(routePath, html) {
   const outputPath =
     routePath === '/'
@@ -298,12 +274,8 @@ async function main() {
     await writeRouteFile(routePath, buildPageHtml(templateHtml, routePath))
   }
 
-  for (const redirect of STATIC_REDIRECTS) {
-    await writeRouteFile(redirect.from, buildRedirectHtml(redirect.to))
-  }
-
   console.log(
-    `Generated ${STATIC_HTML_PATHS.length} static route HTML files and ${STATIC_REDIRECTS.length} redirect pages.`,
+    `Generated ${STATIC_HTML_PATHS.length} static route HTML files.`,
   )
 }
 
