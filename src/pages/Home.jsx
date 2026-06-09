@@ -54,7 +54,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 max-lg:justify-center">
               <Link
                 to="/contact"
                 className="border border-white bg-white px-5 py-3 text-sm font-semibold uppercase text-slate-950 hover:bg-transparent hover:text-white"
