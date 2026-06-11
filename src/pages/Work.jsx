@@ -876,7 +876,6 @@ export default function Work() {
                     <a
                       href="https://fantasydiceroller.com"
                       target="_blank"
-                      rel="noreferrer"
                       className="text-white transition-colors duration-300 hover:text-sky-200 focus-within:text-sky-200"
                     >
                       Fantasy Dice Roller
@@ -892,7 +891,6 @@ export default function Work() {
                 <a
                   href="https://fantasydiceroller.com"
                   target="_blank"
-                  rel="noreferrer"
                   aria-label="See live Fantasy Dice Roller project"
                   className="inline-flex text-sm font-semibold uppercase tracking-[0.14em] text-sky-200 hover:text-white md:justify-self-end"
                 >
