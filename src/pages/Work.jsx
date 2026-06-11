@@ -859,6 +859,51 @@ export default function Work() {
         </div>
       </section>
 
+      <section aria-labelledby="projects-heading" className="bg-black py-10 text-white sm:py-14">
+        <div className="mx-auto max-w-6xl px-6 lg:px-8">
+          <h2
+            id="projects-heading"
+            className="text-left text-4xl font-semibold tracking-widest text-white uppercase sm:text-5xl"
+          >
+            Projects
+          </h2>
+
+          <ul className="mt-8 border-y border-white/35">
+            <li>
+              <article className="-mx-4 grid gap-6 px-4 py-5 transition-colors sm:-mx-6 sm:px-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-center lg:-mx-8 lg:px-8">
+                <div>
+                  <h3 className="text-3xl font-semibold text-white sm:text-4xl">
+                    <a
+                      href="https://fantasydiceroller.com"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-white transition-colors duration-300 hover:text-sky-200 focus-within:text-sky-200"
+                    >
+                      Fantasy Dice Roller
+                    </a>
+                  </h3>
+                  <p className="mt-4 max-w-3xl text-lg leading-relaxed !text-slate-100 sm:text-xl">
+                    Dice rolling for DnD and other tabletop games. Heavily customizable
+                    for rolling every type of die, saving and organizing sets, and
+                    tracking roll history.
+                  </p>
+                </div>
+
+                <a
+                  href="https://fantasydiceroller.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="See live Fantasy Dice Roller project"
+                  className="inline-flex text-sm font-semibold uppercase tracking-[0.14em] text-sky-200 hover:text-white md:justify-self-end"
+                >
+                  See live project
+                </a>
+              </article>
+            </li>
+          </ul>
+        </div>
+      </section>
+
       {typeof window !== 'undefined' &&
         createPortal(
           <div
